@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Victoria Martinez" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../../img/favicon.ico">
+    <title>Python Work</title>
+    <meta name="generator" content="Hugo 0.83.1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../../../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../../../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../../../../post/">BLOG</a></li>
+        
+        <li><a href="../../../../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../../../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../../../../post/2021/05/09/pythonandr/">Python Work</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         May 9, 2021 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="python-and-r-working-together" class="section level2">
+<h2>Python and R Working Together</h2>
+<p>R and Python are used for Data Science, but there’s certainly pros and cons for both systems. For R, it doesn’t require as much computer systems sophistication as Python. You can do simple data analyses in R fairly quickly. There’s also a lot of packages in R that use simple universal language to explore these packages. However, Python has better software for neural nets, utilizes better scale/pipelines, is faster, and much more.
+But do we have to pick between R and Python? The answer is no! Reticulate package allows for R and Python to work together by embedding a Python session within your R session. It’s like combining two different languages in terms of data science.
+The first thing to do is to load the reticulate package. You can pretty much assign the code anything you want. For example…</p>
+<pre class="r"><code>#R code chunk
+install.packages(&quot;reticulate&quot;,repos = &quot;http://cran.us.r-project.org&quot;)</code></pre>
+<pre><code>## Installing package into &#39;/stor/home/vm22948/R/x86_64-pc-linux-gnu-library/3.6&#39;
+## (as &#39;lib&#39; is unspecified)</code></pre>
+<pre><code>## Warning in install.packages(&quot;reticulate&quot;, repos = &quot;http://cran.us.r-
+## project.org&quot;): installation of package &#39;reticulate&#39; had non-zero exit status</code></pre>
+<pre class="r"><code>library(reticulate)
+hi &lt;- &quot;I like&quot;</code></pre>
+<pre class="python"><code>#Python code 
+
+bub = &quot;puzzles and legos&quot;
+print(r.hi, bub)</code></pre>
+<pre><code>## I like puzzles and legos</code></pre>
+<p>One of the things we’ve learned is Numpy, which is numerical computing in Python. It contains a multi-dimensional array and matrix data structures to perform operations on arrays. The code below shows how to use arrays with numphy.</p>
+<pre class="python"><code>import numpy as np
+x=np.array([1,2,3])
+x</code></pre>
+<pre><code>## array([1, 2, 3])</code></pre>
+<pre class="python"><code>print(x/2+1)</code></pre>
+<pre><code>## [1.5 2.  2.5]</code></pre>
+<pre class="python"><code>x.shape</code></pre>
+<pre><code>## (3,)</code></pre>
+<pre class="python"><code>mat1=np.array([[1,2],[3,4]])
+mat1</code></pre>
+<pre><code>## array([[1, 2],
+##        [3, 4]])</code></pre>
+<pre class="python"><code>iden=np.eye(2)
+iden</code></pre>
+<pre><code>## array([[1., 0.],
+##        [0., 1.]])</code></pre>
+<p><img src="static/post/PythonandR_files/R-vs-Python.png" /></p>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../../../../js/docs.min.js"></script>
+<script src="../../../../../js/main.js"></script>
+
+<script src="../../../../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

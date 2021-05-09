@@ -1,7 +1,7 @@
 ---
-title: lol
-author: ''
-date: '2021-05-08'
+title: Python Work 
+author: 'Victoria Martinez'
+date: '2021-05-09'
 slug: lol
 categories: []
 tags: []
