@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Victoria Martinez" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project 2</title>
+    <meta name="generator" content="Hugo 0.83.1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project2/">Project 2</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         January 1, 0001 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="victoria-martinez-vm22948" class="section level2">
+<h2>Victoria Martinez, vm22948</h2>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p><strong>Introduction</strong>
+This data set is exploring the relationship of risk factors with low infant birth weight. It has 189 rows, 10 columns, 1890 observations, and the data was collected at Baystate Medical Center, Springfield, Mass during 1986. There is a ‘low’ column that is an indicator of birth weight less than 2.5 kg; an ‘age’ column with the mother’s age in years; an ‘lwt’ column with mother’s weight in pounds at last menstrual period; a ‘race’ column with mother’s race; a ‘ptl’ column with number of previous premature labours; and a ‘ht’ column with history of hypertension. There’s also a smoke column with smoking status during pregnancy; a ‘ui’ column with the presence of uterine irritability; a ‘ftv’ column with number of physician visits during the 1st trimester; and a ‘bwt’ column with birth weight in grams.</p>
+<p><strong>MANOVA and ANOVA test</strong></p>
+<pre class="r"><code>library(MASS)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:MASS&#39;:
+## 
+##     select</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>nrow(birthwt)</code></pre>
+<pre><code>## [1] 189</code></pre>
+<pre class="r"><code>glimpse(birthwt)</code></pre>
+<pre><code>## Rows: 189
+## Columns: 10
+## $ low   &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ age   &lt;int&gt; 19, 33, 20, 21, 18, 21, 22, 17, 29, 26, 19, 19, 22, 30, 18, 18,…
+## $ lwt   &lt;int&gt; 182, 155, 105, 108, 107, 124, 118, 103, 123, 113, 95, 150, 95, …
+## $ race  &lt;int&gt; 2, 3, 1, 1, 1, 3, 1, 3, 1, 1, 3, 3, 3, 3, 1, 1, 2, 1, 3, 1, 3, …
+## $ smoke &lt;int&gt; 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, …
+## $ ptl   &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, …
+## $ ht    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ ui    &lt;int&gt; 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, …
+## $ ftv   &lt;int&gt; 0, 3, 1, 2, 0, 0, 1, 1, 1, 0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 1, 2, …
+## $ bwt   &lt;int&gt; 2523, 2551, 2557, 2594, 2600, 2622, 2637, 2637, 2663, 2665, 272…</code></pre>
+<pre class="r"><code>manova1&lt;-manova(cbind(lwt,bwt)~smoke, data=birthwt)
+summary(manova1)</code></pre>
+<pre><code>##            Df   Pillai approx F num Df den Df  Pr(&gt;F)  
+## smoke       1 0.036351   3.5081      2    186 0.03195 *
+## Residuals 187                                          
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary.aov(manova1)</code></pre>
+<pre><code>##  Response lwt :
+##              Df Sum Sq Mean Sq F value Pr(&gt;F)
+## smoke         1    343  343.12  0.3657 0.5461
+## Residuals   187 175455  938.26               
+## 
+##  Response bwt :
+##              Df   Sum Sq Mean Sq F value   Pr(&gt;F)   
+## smoke         1  3625946 3625946  7.0378 0.008667 **
+## Residuals   187 96343710  515207                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>birthwt%&gt;%group_by(smoke)%&gt;%summarize(mean(lwt),mean(bwt))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   smoke `mean(lwt)` `mean(bwt)`
+##   &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1     0        131.       3056.
+## 2     1        128.       2772.</code></pre>
+<pre class="r"><code>pairwise.t.test(birthwt$lwt,
+birthwt$smoke, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  birthwt$lwt and birthwt$smoke 
+## 
+##   0   
+## 1 0.55
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>pairwise.t.test(birthwt$bwt, birthwt$smoke, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  birthwt$bwt and birthwt$smoke 
+## 
+##   0     
+## 1 0.0087
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>.05/5</code></pre>
+<pre><code>## [1] 0.01</code></pre>
+<p>I did 1 MANOVA, 2 ANOVAs, and 2 t-tests (5 tests): the alpha value used should be 0.01 after adjusting the significance level. A MANOVA test was used to determine the effect of the smoke status (0 and 1) on two dependent variables (lwt and bwt). There were no significant differences found among the two smoke statuses for the two dependent variables, Pillai trace = .04, pseudo F = 3.5, p &gt; .01. Univariate ANOVAs for each dependent variable were conducted as follow-up tests to the
+MANOVA, using the Bonferroni method for controlling Type I error rates for multiple comparisons. The univariate ANOVAs for lwt was not significant while the bwt was significant, F(1,187)=.37, p-value&gt;.01, and F(1,187)=7.0,p-value=.009, respectively. Post hoc analysis was performed conducting pairwise comparisons to determine which smoke status differed in lwt and bwt. The two smoke status were found to differ significantly for bwt only after adjusting for multiple comparisons (bonferroni). I think it doesn’t meet random sample since it comes from one medical center, and there doesn’t seem to me that there are extreme univariate or multivariate outliers. I don’t think the multivariate normality or homogeneity is met.</p>
+<p><strong>Randomization Test</strong></p>
+<pre class="r"><code>library(ggplot2)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ tibble  3.0.4     ✓ purrr   0.3.4
+## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## x dplyr::select() masks MASS::select()</code></pre>
+<pre class="r"><code>birthwt1 &lt;-birthwt%&gt;% mutate(race1 =recode(race, &quot;3&quot;=&quot;other&quot;, &quot;1&quot;=&quot;white&quot;, &quot;2&quot;=&quot;black&quot;))
+birthwt1 %&gt;% summarize(cor(lwt,bwt, use=&quot;pair&quot;))</code></pre>
+<pre><code>##   cor(lwt, bwt, use = &quot;pair&quot;)
+## 1                   0.1857333</code></pre>
+<pre class="r"><code>birthwt1 %&gt;% select_if(is.numeric) %&gt;% cor %&gt;% as.data.frame %&gt;%
+rownames_to_column %&gt;% pivot_longer(-1) %&gt;%
+ggplot(aes(rowname,name,fill=value))+geom_tile()+
+geom_text(aes(label=round(value,2)))+
+xlab(&quot;&quot;)+ylab(&quot;&quot;)+coord_fixed()</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>The null hypothesis is that there is no correlation between birth weight and the mother’s weight. The alternative hypothesis is that there is a correlation between birth weight and mother’s weight. The correlation coefficient is .186 between bwt and lwt, which is surprising to me because I would think that if the mother’s weight goes up, so does the weight of the baby. The correlation heatmap shows there’s not really any strong correlation between these variables, either positive or negative.</p>
+<p><strong>Linear Regression Model</strong></p>
+<pre class="r"><code>library(lmtest)</code></pre>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<pre class="r"><code>library(sandwich)
+birthwt1$bwt_c &lt;- birthwt1$bwt - mean(birthwt1$bwt)
+birthwt1$lwt_c &lt;- birthwt1$lwt - mean(birthwt1$lwt)
+fitbwt &lt;- lm(lwt_c~race1*bwt_c, data=birthwt1)
+summary(fitbwt)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lwt_c ~ race1 * bwt_c, data = birthwt1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -49.353 -20.456  -5.913  12.527 126.297 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       19.096348   6.071896   3.145 0.001938 ** 
+## race1other       -27.863931   7.072437  -3.940 0.000116 ***
+## race1white       -18.122329   6.792223  -2.668 0.008313 ** 
+## bwt_c              0.009353   0.009125   1.025 0.306699    
+## race1other:bwt_c  -0.001943   0.010389  -0.187 0.851871    
+## race1white:bwt_c  -0.001365   0.010006  -0.136 0.891684    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 29.14 on 183 degrees of freedom
+## Multiple R-squared:  0.1161, Adjusted R-squared:  0.09199 
+## F-statistic: 4.809 on 5 and 183 DF,  p-value: 0.0003726</code></pre>
+<pre class="r"><code>ggplot(birthwt1, aes(lwt_c,bwt_c, color = race1)) + geom_smooth(method = &quot;lm&quot;, se = F, fullrange = T)+
+geom_point()+geom_vline(xintercept=0,lty=2)+geom_vline(xintercept=mean(birthwt1$lwt_c, na.rm=T), lty=2)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>resids &lt;- fitbwt$residuals; fitvals &lt;- fitbwt$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, col=&quot;red&quot;)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<pre class="r"><code>ggplot()+geom_histogram(aes(resids), bins=20)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-2-3.png" width="672" /></p>
+<pre class="r"><code>coeftest(fitbwt, vcov=vcovHC(fitbwt))</code></pre>
+<pre><code>## 
+## t test of coefficients:
+## 
+##                     Estimate  Std. Error t value Pr(&gt;|t|)   
+## (Intercept)       19.0963478   9.7234276  1.9640 0.051050 . 
+## race1other       -27.8639308  10.2442325 -2.7200 0.007158 **
+## race1white       -18.1223292  10.1663647 -1.7826 0.076313 . 
+## bwt_c              0.0093531   0.0184955  0.5057 0.613678   
+## race1other:bwt_c  -0.0019426   0.0189068 -0.1027 0.918275   
+## race1white:bwt_c  -0.0013645   0.0188535 -0.0724 0.942383   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The mean/predicted mother’s weight for black mother’s with average birth weight is 19.096. The races other than white and black mother’s with average birth weight have predicted mother’s weight that is 27.864 lower than black mother’s with average birth weight for their infant. White mother’s who have an infant with average birth weight have a predicted weight that is 18.122 lower than black mother’s with an infant average birth weight. For every 1-unit increase in birth weight, the mother’s predicted average weight goes up .009 for this group. Slope of birth weight for other races is .0019 less than for black mother’s. The slope of birth weight for white mother’s is .001 than for black mother’s. The model explains about .1161 of the variantion in the outcome.
+The linearity and homoskedasticity looks like the points are more aggregated on the left side of the graph. It doesn’t look like the worst graph, but it doesn’t seem like it passes the assumptions. The normality graph is shifted to the left and is not centered.
+Mother’s with a different race than white or black with average infant birth weight with predicted average weight is 27.86 lower than black mother’s with average infant birth weight. This result was significant, and the others were not using the robust standard errors. This is different than without using robust standard errors, in which race1white and intercept were also significant too.</p>
+<p><strong>Regression Model</strong></p>
+<pre class="r"><code>set.seed(348)
+samp_distn&lt;-replicate(5000, {
+boot_dat&lt;-boot_dat&lt;-birthwt1[sample(nrow(birthwt1),replace=TRUE),]
+fitbwt2&lt;-lm(lwt_c ~ race1 * bwt_c, data=boot_dat)
+coef(fitbwt2)
+})
+samp_distn%&gt;%t%&gt;%as.data.frame%&gt;%summarize_all(sd)</code></pre>
+<pre><code>##   (Intercept) race1other race1white      bwt_c race1other:bwt_c
+## 1     9.16387   9.697101   9.664017 0.01652433       0.01693168
+##   race1white:bwt_c
+## 1       0.01694708</code></pre>
+<p>The standard errors are higher after bootstrapping the standard errors compared to the linear regression model. The standard errors are higher for race1other and race1white for the regression model using robust standard errors versus the bootstrapped standard errors.</p>
+<p><strong>Logistic Regression</strong></p>
+<pre class="r"><code>library(glmnet)</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<pre><code>## Loaded glmnet 4.1-1</code></pre>
+<pre class="r"><code>fitbwt4 &lt;- glm(smoke~race1+bwt_c, family=&quot;binomial&quot;, data=birthwt1)
+
+exp(coef(fitbwt4))</code></pre>
+<pre><code>## (Intercept)  race1other  race1white       bwt_c 
+##   0.4940403   0.3418588   2.8149066   0.9990937</code></pre>
+<pre class="r"><code>probs &lt;- predict(fitbwt4, type=&quot;response&quot;)
+table(predict=as.numeric(probs&gt;.5), truth=birthwt1$smoke)%&gt;%addmargins</code></pre>
+<pre><code>##        truth
+## predict   0   1 Sum
+##     0    97  32 129
+##     1    18  42  60
+##     Sum 115  74 189</code></pre>
+<pre class="r"><code>library(plotROC)
+ROCplot &lt;- ggplot(birthwt1)+geom_roc(aes(d=smoke, m=probs), n.cuts=0)
+calc_auc(ROCplot)</code></pre>
+<pre><code>##   PANEL group       AUC
+## 1     1    -1 0.7658637</code></pre>
+<pre class="r"><code>plot(ROCplot)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>birthwt1$logit&lt;-predict(fitbwt4)
+
+ggplot(birthwt1,aes(logit, fill=smoke))+geom_density(alpha=.3, color=&quot;darkblue&quot;, fill=&quot;lightblue&quot;)+
+  geom_vline(xintercept=0,lty=2)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code>ROCplot3 &lt;- ggplot(birthwt1)+geom_roc(aes(d=smoke, m=probs), n.cuts=0)+geom_segment(aes(x=0, xend=1, y=0, yend=1), lty=2)
+plot(ROCplot3)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
+<pre class="r"><code>calc_auc(ROCplot3)</code></pre>
+<pre><code>##   PANEL group       AUC
+## 1     1    -1 0.7658637</code></pre>
+<p>Controlling for birth weight, the odds of having a positive smoke status for race1other is .342 times odds for black mother’s. Controlling for birth weight, the odds of having a positive smoke status for race1white is 2.815 times odds for for black mother’s. Controlling for race, for every one unit increases in birth weight, odds of smoke status change by a factor of .999.
+The TPR is .568 which is the probability of detecting smoke status if they really smoke; the TNR is .843 which is the probability of a negative smoke status for healthy mother’s; and the PPV is the .7 which is the proportion classified as positive smokers who actually are. The accuracy is .735, which is how accurate the test is.
+The AUC is .766, which is the probability that a randomly selected mother with a positive smoke status has a higher predicted probability than a randomly selected person without a smoke status.</p>
+<p><strong>Logistic Regression</strong></p>
+<pre class="r"><code>fitbwt5 &lt;- glm(smoke~ftv+low+age+ptl+ht+ui, family=&quot;binomial&quot;, data=birthwt1)
+exp(coef(fitbwt5))</code></pre>
+<pre><code>## (Intercept)         ftv         low         age         ptl          ht 
+##   0.6975876   0.9904291   1.7348768   0.9832475   2.0101406   0.9674966 
+##          ui 
+##   1.0015119</code></pre>
+<pre class="r"><code>probs5 &lt;- predict(fitbwt5, type=&quot;response&quot;)
+table(predict=as.numeric(probs5&gt;.5), truth=birthwt1$smoke)%&gt;%addmargins</code></pre>
+<pre><code>##        truth
+## predict   0   1 Sum
+##     0   108  59 167
+##     1     7  15  22
+##     Sum 115  74 189</code></pre>
+<pre class="r"><code>(108+15)/189; 108/167;15/22;108/115</code></pre>
+<pre><code>## [1] 0.6507937</code></pre>
+<pre><code>## [1] 0.6467066</code></pre>
+<pre><code>## [1] 0.6818182</code></pre>
+<pre><code>## [1] 0.9391304</code></pre>
+<pre class="r"><code>ROCplot5 &lt;-ggplot(birthwt1)+geom_roc(aes(d=smoke,m=probs5), n.cuts=0)
+calc_auc(ROCplot5)</code></pre>
+<pre><code>##   PANEL group       AUC
+## 1     1    -1 0.6266745</code></pre>
+<pre class="r"><code>set.seed(1234)
+k=10 
+data5&lt;-birthwt1[sample(nrow(birthwt1)),] 
+folds&lt;-cut(seq(1:nrow(birthwt1)),breaks=k,labels=F)
+diags&lt;-NULL
+for(i in 1:k){
+train&lt;-data5[folds!=i,]
+test&lt;-data5[folds==i,]
+truth&lt;-test$smoke
+fitbwt5&lt;-glm(smoke~ftv+low+age+ptl+ht+ui,data=train,family=&quot;binomial&quot;)
+probs6&lt;-predict(fitbwt5,newdata = test,type=&quot;response&quot;)
+diags&lt;-rbind(diags,class_diag(probs6,truth))
+}
+summarize_all(diags,mean)</code></pre>
+<pre><code>##         acc      sens      spec       ppv       auc
+## 1 0.5885965 0.2180952 0.8357504 0.4845238 0.5447042</code></pre>
+<p>The Accuracy is .651, which is the how accurate the test is; TPR is .647, which is the proportion of smoke status correctly identified; the specificity is .682, which is the proportion of non-smoke stauts correctly identified; and PPV is .939, the proportion classified as smokers who actually are. The AUC is .627, which tells us the model is not a good predictor overall.</p>
+<p>After performing the 10 fold CV, the accuracy changed to .589, PPV is .485, TPR is .218, and specificity is .836. The AUC is .545, which is telling us how well are model is predicting. The value is very low, so it is not a good predictor. The in-sample had an AUC of .627, which higher than the CV but still not a good predictor.</p>
+<p><strong>LASSO</strong></p>
+<pre class="r"><code>y&lt;-as.matrix(birthwt1$smoke) 
+x&lt;-model.matrix(smoke~bwt_c+lwt_c+ftv+low+age+ptl+ht+ui+race1,data=birthwt1)[,-1] 
+head(x)</code></pre>
+<pre><code>##       bwt_c      lwt_c ftv low age ptl ht ui race1other race1white
+## 1 -421.5873  52.185185   0   0  19   0  0  1          0          0
+## 2 -393.5873  25.185185   3   0  33   0  0  0          1          0
+## 3 -387.5873 -24.814815   1   0  20   0  0  0          0          1
+## 4 -350.5873 -21.814815   2   0  21   0  0  1          0          1
+## 5 -344.5873 -22.814815   0   0  18   0  0  1          0          1
+## 6 -322.5873  -5.814815   0   0  21   0  0  0          1          0</code></pre>
+<pre class="r"><code>x &lt;- scale(x)
+cv &lt;- cv.glmnet(x,y)
+{plot(cv$glmnet.fit, &quot;lambda&quot;, label=TRUE); abline(v = log(cv$lambda.1se)); abline(v = log(cv$lambda.min),lty=2)}</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>cv&lt;-cv.glmnet(x,y,family=&quot;binomial&quot;)
+lasso&lt;-glmnet(x,y,family=&quot;binomial&quot;,lambda=cv$lambda.1se)
+coef(lasso)</code></pre>
+<pre><code>## 11 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
+##                     s0
+## (Intercept) -0.4440146
+## bwt_c        .        
+## lwt_c        .        
+## ftv          .        
+## low          .        
+## age          .        
+## ptl          .        
+## ht           .        
+## ui           .        
+## race1other  -0.1305968
+## race1white   0.0437866</code></pre>
+<pre class="r"><code>set.seed(1234)
+k=10
+data6 &lt;- birthwt1 %&gt;% sample_frac
+folds &lt;- ntile(1:nrow(data6),n=10) 
+diags&lt;-NULL
+for(i in 1:k){
+train &lt;- data6[folds!=i,] 
+test &lt;- data6[folds==i,] 
+truth &lt;- test$smoke
+fit6 &lt;- glm(smoke~race1,
+data=train, family=&quot;binomial&quot;)
+probs66 &lt;- predict(fit6, newdata=test, type=&quot;response&quot;)
+diags&lt;-rbind(diags,class_diag(probs66,truth))
+}
+diags%&gt;%summarize_all(mean)</code></pre>
+<pre><code>##         acc      sens      spec       ppv       auc
+## 1 0.6508772 0.6829365 0.6160317 0.5492677 0.6690188</code></pre>
+<p>After running LASSO, the only predictor I could possibly use is race1. At first, I didn’t include race1, bwt_c, or lwt_c since I already used these but there was no predictor possible without it. I performed a 10-fold CV with the variables lasso selected, and the AUC turned out to be .669. For the first logistic regression without 10-fold, the AUC larger compared to this one. The second logistic regression with 10-fold was smaller than .669.</p>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

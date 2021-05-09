@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Victoria Martinez" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project 1</title>
+    <meta name="generator" content="Hugo 0.83.1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project1/">Project 1</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         January 1, 0001 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+<script src="../../rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="../../rmarkdown-libs/plotly-binding/plotly.js"></script>
+<script src="../../rmarkdown-libs/typedarray/typedarray.min.js"></script>
+<script src="../../rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="../../rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<link href="../../rmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/plotly-main/plotly-latest.min.js"></script>
+
+
+<div id="victoria-martinez-eid-vm22948" class="section level2">
+<h2>Victoria Martinez, EID: vm22948</h2>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p><strong>Introduction</strong></p>
+<p>The data sets I have chosen are USArrests and us_rent_income. USArrests includes murder, assault, and rape arrests per 100,000 residents in each state, as well as the percent urban population. The us_rent_income includes the estimated value for the median monthly rent and yearly incomes for each state, as well as the margin of error. I acquired these data sets by looking up all the data sets on in all the packages installed in the server. They were interesting to me because topics of the injustice of the criminal system and trends you see with the people who do end up going to jail is a problem in society. I expect to see that states with lower median incomes have higher rates of arrests. I also expect to see rent and incomes having a high correlation.</p>
+<p><strong>Tidying</strong>*</p>
+<pre class="r"><code>library(dplyr)
+library(tidyr)
+usinrent &lt;- us_rent_income %&gt;% mutate(third_col = moe) %&gt;% mutate_at(c(&quot;third_col&quot;), 
+    list(lead), n = 1) %&gt;% rename(moe_inc = moe, moe_rent = third_col) %&gt;% 
+    pivot_wider(names_from = &quot;variable&quot;, values_from = &quot;estimate&quot;)
+
+usinrent1 &lt;- usinrent %&gt;% mutate(rent = lead(rent)) %&gt;% dplyr::filter(row_number()%%2 == 
+    1)
+glimpse(usinrent1)</code></pre>
+<pre><code>## Rows: 52
+## Columns: 6
+## $ GEOID    &lt;chr&gt; &quot;01&quot;, &quot;02&quot;, &quot;04&quot;, &quot;05&quot;, &quot;06&quot;, &quot;08&quot;, &quot;09&quot;, &quot;10&quot;, &quot;11&quot;, &quot;12&quot;, …
+## $ NAME     &lt;chr&gt; &quot;Alabama&quot;, &quot;Alaska&quot;, &quot;Arizona&quot;, &quot;Arkansas&quot;, &quot;California&quot;, &quot;C…
+## $ moe_inc  &lt;dbl&gt; 136, 508, 148, 165, 109, 109, 195, 247, 681, 70, 106, 218, 2…
+## $ moe_rent &lt;dbl&gt; 3, 13, 4, 5, 3, 5, 5, 10, 17, 3, 3, 18, 7, 3, 3, 4, 5, 4, 4,…
+## $ income   &lt;dbl&gt; 24476, 32940, 27517, 23789, 29454, 32401, 35326, 31560, 4319…
+## $ rent     &lt;dbl&gt; 747, 1200, 972, 709, 1358, 1125, 1123, 1076, 1424, 1077, 927…</code></pre>
+<p>I needed to tidy the us_rent_income data set before merging both data sets. First, I wanted to make every other row into a separate column from the “column” by using mutate and renaming it to have two columns for the moe rent and moe income. After that, I used pivot_wider to make every variable a column by moving the rent and income variable from the “variable” column into their own columns with their variables. I then shifted the cells in column rent up by one and deleted the even rows that had NA as a value.</p>
+<pre class="r"><code>USArrests1 &lt;- tibble::rownames_to_column(USArrests, &quot;NAME&quot;)
+glimpse(USArrests1)</code></pre>
+<pre><code>## Rows: 50
+## Columns: 5
+## $ NAME     &lt;chr&gt; &quot;Alabama&quot;, &quot;Alaska&quot;, &quot;Arizona&quot;, &quot;Arkansas&quot;, &quot;California&quot;, &quot;C…
+## $ Murder   &lt;dbl&gt; 13.2, 10.0, 8.1, 8.8, 9.0, 7.9, 3.3, 5.9, 15.4, 17.4, 5.3, 2…
+## $ Assault  &lt;int&gt; 236, 263, 294, 190, 276, 204, 110, 238, 335, 211, 46, 120, 2…
+## $ UrbanPop &lt;int&gt; 58, 48, 80, 50, 91, 78, 77, 72, 80, 60, 83, 54, 83, 65, 57, …
+## $ Rape     &lt;dbl&gt; 21.2, 44.5, 31.0, 19.5, 40.6, 38.7, 11.1, 15.8, 31.9, 25.8, …</code></pre>
+<p>I then had to tidy USArrests data set so that the observations(rows) would become a single column in order for both datasets to have a common variable to join.</p>
+<p><strong><em>Joining</em></strong></p>
+<pre class="r"><code>bothdata &lt;- usinrent1 %&gt;% inner_join(USArrests1, by = &quot;NAME&quot;)
+glimpse(bothdata)</code></pre>
+<pre><code>## Rows: 50
+## Columns: 10
+## $ GEOID    &lt;chr&gt; &quot;01&quot;, &quot;02&quot;, &quot;04&quot;, &quot;05&quot;, &quot;06&quot;, &quot;08&quot;, &quot;09&quot;, &quot;10&quot;, &quot;12&quot;, &quot;13&quot;, …
+## $ NAME     &lt;chr&gt; &quot;Alabama&quot;, &quot;Alaska&quot;, &quot;Arizona&quot;, &quot;Arkansas&quot;, &quot;California&quot;, &quot;C…
+## $ moe_inc  &lt;dbl&gt; 136, 508, 148, 165, 109, 109, 195, 247, 70, 106, 218, 208, 8…
+## $ moe_rent &lt;dbl&gt; 3, 13, 4, 5, 3, 5, 5, 10, 3, 3, 18, 7, 3, 3, 4, 5, 4, 4, 7, …
+## $ income   &lt;dbl&gt; 24476, 32940, 27517, 23789, 29454, 32401, 35326, 31560, 2595…
+## $ rent     &lt;dbl&gt; 747, 1200, 972, 709, 1358, 1125, 1123, 1076, 1077, 927, 1507…
+## $ Murder   &lt;dbl&gt; 13.2, 10.0, 8.1, 8.8, 9.0, 7.9, 3.3, 5.9, 15.4, 17.4, 5.3, 2…
+## $ Assault  &lt;int&gt; 236, 263, 294, 190, 276, 204, 110, 238, 335, 211, 46, 120, 2…
+## $ UrbanPop &lt;int&gt; 58, 48, 80, 50, 91, 78, 77, 72, 80, 60, 83, 54, 83, 65, 57, …
+## $ Rape     &lt;dbl&gt; 21.2, 44.5, 31.0, 19.5, 40.6, 38.7, 11.1, 15.8, 31.9, 25.8, …</code></pre>
+<p>There were 52 observations in the usinrent1 and 50 observartions in USArrests. I used inner join so that all the rows with NA’s would be dropped. The data set usinrent1 included District of Columbia and Puerto Rico and USArrests1 didn’t, so inner join fixed this so that the joined data set has 50 states with no NA cells.</p>
+<p><strong><em>Wrangling</em></strong></p>
+<pre class="r"><code>bothdata1 &lt;- bothdata %&gt;% mutate(percent = (Assault/1e+05))
+bothdata1 &lt;- subset(bothdata1, select = -c(GEOID))
+
+bothdata11 &lt;- bothdata1 %&gt;% group_by(NAME) %&gt;% arrange(desc(Murder))
+bothdata12 &lt;- bothdata1 %&gt;% group_by(NAME) %&gt;% arrange(desc(income))
+
+bothdata2 &lt;- bothdata1 %&gt;% select(NAME, UrbanPop) %&gt;% filter(UrbanPop &lt;= 
+    50)
+glimpse(bothdata2)</code></pre>
+<pre><code>## Rows: 9
+## Columns: 2
+## $ NAME     &lt;chr&gt; &quot;Alaska&quot;, &quot;Arkansas&quot;, &quot;Mississippi&quot;, &quot;North Carolina&quot;, &quot;Nort…
+## $ UrbanPop &lt;int&gt; 48, 50, 44, 45, 44, 48, 45, 32, 39</code></pre>
+<p>I used ‘mutate’ to create a new column of the percentage of urban population for each state. The ‘select’ function was used to choose certain columns, and ‘arrange’ arranged the data in descending order. I thought it was interesting that Mississippi has the lowest median yearly income and the second highest murder rates. However Nevada has the highest rape cases and North Carolina has the highest assault cases. I used select and filter so that I can view what states have an urban population percentage equal or lower than 50%.</p>
+<pre class="r"><code>bothdata1 %&gt;% summarise_all(n_distinct)</code></pre>
+<pre><code>## # A tibble: 1 x 10
+##    NAME moe_inc moe_rent income  rent Murder Assault UrbanPop  Rape percent
+##   &lt;int&gt;   &lt;int&gt;    &lt;int&gt;  &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;    &lt;int&gt; &lt;int&gt;   &lt;int&gt;
+## 1    50      45       11     50    47     43      45       36    48      45</code></pre>
+<pre class="r"><code>summary(bothdata1)</code></pre>
+<pre><code>##      NAME              moe_inc         moe_rent         income     
+##  Length:50          Min.   : 69.0   Min.   : 2.00   Min.   :22766  
+##  Class :character   1st Qu.:113.0   1st Qu.: 3.00   1st Qu.:26307  
+##  Mode  :character   Median :153.5   Median : 4.00   Median :28872  
+##                     Mean   :177.3   Mean   : 5.38   Mean   :28908  
+##                     3rd Qu.:208.0   3rd Qu.: 6.00   3rd Qu.:31434  
+##                     Max.   :508.0   Max.   :18.00   Max.   :37147  
+##       rent            Murder          Assault         UrbanPop    
+##  Min.   : 681.0   Min.   : 0.800   Min.   : 45.0   Min.   :32.00  
+##  1st Qu.: 782.5   1st Qu.: 4.075   1st Qu.:109.0   1st Qu.:54.50  
+##  Median : 864.5   Median : 7.250   Median :159.0   Median :66.00  
+##  Mean   : 931.8   Mean   : 7.788   Mean   :170.8   Mean   :65.54  
+##  3rd Qu.:1070.0   3rd Qu.:11.250   3rd Qu.:249.0   3rd Qu.:77.75  
+##  Max.   :1507.0   Max.   :17.400   Max.   :337.0   Max.   :91.00  
+##       Rape          percent        
+##  Min.   : 7.30   Min.   :0.000450  
+##  1st Qu.:15.07   1st Qu.:0.001090  
+##  Median :20.10   Median :0.001590  
+##  Mean   :21.23   Mean   :0.001708  
+##  3rd Qu.:26.18   3rd Qu.:0.002490  
+##  Max.   :46.00   Max.   :0.003370</code></pre>
+<p>Based on the summarized data, it was not surprising that assault arrests has the highest minimum value compared to murder and rape arrests. It also has the highest maximum value. It was surprising that in one of the states the median rent is as low as 681.</p>
+<p><strong><em>Visualizing</em></strong></p>
+<pre class="r"><code>cormat &lt;- bothdata1 %&gt;% select_if(is.numeric) %&gt;% cor(use = &quot;pair&quot;)
+glimpse(cormat)</code></pre>
+<pre><code>##  num [1:9, 1:9] 1 0.7698 0.2746 0.0961 -0.3846 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 2
+##   ..$ : chr [1:9] &quot;moe_inc&quot; &quot;moe_rent&quot; &quot;income&quot; &quot;rent&quot; ...
+##   ..$ : chr [1:9] &quot;moe_inc&quot; &quot;moe_rent&quot; &quot;income&quot; &quot;rent&quot; ...</code></pre>
+<p>Above I found the correlations of all numeric values.</p>
+<pre class="r"><code>library(tidyverse)
+tidycor &lt;- cormat %&gt;% as.data.frame %&gt;% rownames_to_column(&quot;var1&quot;) %&gt;% 
+    pivot_longer(-1, names_to = &quot;var2&quot;, values_to = &quot;correlation&quot;)
+glimpse(tidycor)</code></pre>
+<pre><code>## Rows: 81
+## Columns: 3
+## $ var1        &lt;chr&gt; &quot;moe_inc&quot;, &quot;moe_inc&quot;, &quot;moe_inc&quot;, &quot;moe_inc&quot;, &quot;moe_inc&quot;, &quot;m…
+## $ var2        &lt;chr&gt; &quot;moe_inc&quot;, &quot;moe_rent&quot;, &quot;income&quot;, &quot;rent&quot;, &quot;Murder&quot;, &quot;Assau…
+## $ correlation &lt;dbl&gt; 1.00000000, 0.76975873, 0.27464541, 0.09611554, -0.384597…</code></pre>
+<p>I made a correlation matrix of the numeric variables titled cormat, and then tidyed the correlations that’s titled tidycor.</p>
+<pre class="r"><code>tidycor %&gt;% ggplot(aes(var1, var2, fill = correlation)) + geom_tile() + 
+    scale_fill_gradient2(low = &quot;red&quot;, mid = &quot;white&quot;, high = &quot;blue&quot;) + 
+    geom_text(aes(label = round(correlation, 2)), color = &quot;black&quot;, 
+        size = 4) + theme(axis.text.x = element_text(angle = 90, 
+    hjust = 1)) + coord_fixed()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" />
+In the correlation heatmap, the biggest correlations are for murder and assault arrests and percent of urban population and murder arrests. I expected to see that states with high murder arrests also have high assault arrests. The correlation heatmap also shows that rent and income are correlated as well, which makes sense that states with higher incomes would be able to pay higher rent. There seems to be no correlation between rent and Murder arrests, Rape or income, or Murder arrests and UrbanPop. This was a surprising result to me.</p>
+<pre class="r"><code>ggplot(data = bothdata, aes(x = rent, y = income)) + geom_point(size = 4, 
+    aes(color = NAME), stat = &quot;summary&quot;) + ggtitle(&quot;Average Income vs Rent for 50 States&quot;) + 
+    scale_y_continuous(breaks = seq(20000, 38000, 1000))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" />
+As expected, there seems to be some trend that the higher the income, the more rent will be. Based on the graph, it seems like Hawaii has the highest median rent, but the income is not as high. Maryland has a high median income, but the rent is not as high as in Hawaii. I expected to see that California had a very high rent, but it had an even lower income than Maryland despite them having similar median rent values.</p>
+<pre class="r"><code>ggplot(bothdata, aes(x = Murder, y = income)) + geom_boxplot() + 
+    geom_jitter(alpha = 0.5, aes(color = NAME)) + ggtitle(&quot;Relationship Between Murder Arrests and Average Income&quot;) + 
+    theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>As you can see on the boxplot, there’s many states that are outliers and don’t fall in line with the boxplot. I wanted to use these variables because I originally thought that there would a relationship between these variables, but there was small negative correlation.</p>
+<p><strong><em>Dimensionality Reduction</em></strong></p>
+<pre class="r"><code>library(cluster)
+clust_dat &lt;- bothdata %&gt;% dplyr::select(&quot;income&quot;, &quot;Murder&quot;, &quot;UrbanPop&quot;)
+pam1 &lt;- clust_dat %&gt;% scale() %&gt;% pam(k = 2)
+pam1</code></pre>
+<pre><code>## Medoids:
+##      ID      income     Murder    UrbanPop
+## [1,] 42 -1.01512291  1.2425641 -0.45182086
+## [2,] 16  0.06403868 -0.4105145  0.03177945
+## Clustering vector:
+##  [1] 1 2 2 1 2 2 2 2 1 1 2 2 2 2 2 2 1 1 2 2 2 1 2 1 2 2 2 2 2 2 1 2 1 2 2 2 2 2
+## [39] 2 1 2 1 1 2 2 2 2 1 2 2
+## Objective function:
+##    build     swap 
+## 1.287034 1.287034 
+## 
+## Available components:
+##  [1] &quot;medoids&quot;    &quot;id.med&quot;     &quot;clustering&quot; &quot;objective&quot;  &quot;isolation&quot; 
+##  [6] &quot;clusinfo&quot;   &quot;silinfo&quot;    &quot;diss&quot;       &quot;call&quot;       &quot;data&quot;</code></pre>
+<p>I used PAM to create two clusters for my numeric values because I thought that was the best estimate. Below, I performed the function that would pick the best cluster number. The Mediods are the inital cluster centers</p>
+<pre class="r"><code>pam1$silinfo$avg.width</code></pre>
+<pre><code>## [1] 0.3265507</code></pre>
+<pre class="r"><code>pam_dat &lt;- bothdata %&gt;% select(&quot;income&quot;, &quot;Murder&quot;, &quot;UrbanPop&quot;)
+sil_width &lt;- vector()
+for (i in 2:10) {
+    pam_fit &lt;- pam(pam_dat, k = i)
+    sil_width[i] &lt;- pam_fit$silinfo$avg.width
+}
+ggplot() + geom_line(aes(x = 1:10, y = sil_width)) + scale_x_continuous(name = &quot;k&quot;, 
+    breaks = 1:10)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Based on the silhouette width, the number of clusters should be 2. The higher the silhouette width, the more cohesive and separated the clusters are.</p>
+<pre class="r"><code>library(plotly)
+pamclust &lt;- clust_dat %&gt;% mutate(cluster = as.factor(pam1$clustering))
+pamclust %&gt;% plot_ly(x = ~income, y = ~Murder, z = ~UrbanPop, 
+    color = ~cluster, type = &quot;scatter3d&quot;, mode = &quot;markers&quot;) %&gt;% 
+    layout(autosize = F, width = 900, height = 400)</code></pre>
+<p><div id="htmlwidget-1" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"visdat":{"1794117b9572a":["function () ","plotlyVisDat"]},"cur_data":"1794117b9572a","attrs":{"1794117b9572a":{"x":{},"y":{},"z":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"width":900,"height":400,"margin":{"b":40,"l":60,"t":25,"r":10},"autosize":false,"scene":{"xaxis":{"title":"income"},"yaxis":{"title":"Murder"},"zaxis":{"title":"UrbanPop"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[24476,23789,25952,27024,24702,25086,26987,22766,24457,26482,25454,25453,28063,23707],"y":[13.2,8.8,15.4,17.4,9.7,15.4,12.1,16.1,11.4,13,14.4,13.2,12.7,5.7],"z":[58,50,80,60,52,66,74,44,70,45,48,59,80,39],"mode":"markers","type":"scatter3d","name":"1","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"frame":null},{"x":[32940,27517,29454,32401,35326,31560,32453,25298,30684,27247,30002,29126,26841,37147,34498,32734,26999,26249,30020,29019,33172,35075,31057,32336,27435,26207,27389,28923,30210,28821,27928,29351,32545,32318,29868,30854],"y":[10,8.1,9,7.9,3.3,5.9,5.3,2.6,10.4,7.2,2.2,6,2.1,11.3,4.4,2.7,9,6,4.3,12.2,2.1,7.4,11.1,0.8,7.3,6.6,4.9,6.3,3.4,3.8,3.2,2.2,8.5,4,2.6,6.8],"z":[48,80,91,78,77,72,83,54,83,65,57,66,51,67,85,66,70,53,62,81,56,89,86,44,75,68,67,72,87,45,80,32,63,73,66,60],"mode":"markers","type":"scatter3d","name":"2","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+I made a 3D representation of the three variables in 2 clusters. Even though I used the best cluster number, this plot shows there’s not a strong relationship between these three variables. The clusters are not that separated and are very close to each other.</p>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

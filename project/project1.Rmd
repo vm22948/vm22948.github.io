@@ -1,0 +1,144 @@
+---
+title: "Project 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, fig.align = "center", 
+    warning = F, message = F, tidy = TRUE, tidy.opts = list(width.cutoff = 60), 
+    R.options = list(max.print = 100))
+
+```
+
+## Victoria Martinez, EID: vm22948
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+**Introduction**
+
+The data sets I have chosen are USArrests and us_rent_income. USArrests includes murder, assault, and rape arrests per 100,000 residents in each state, as well as the percent urban population. The us_rent_income includes the estimated value for the median monthly rent and yearly incomes for each state, as well as the margin of error. I acquired these data sets by looking up all the data sets on  in all the packages installed in the server. They were interesting to me because topics of the injustice of the criminal system and trends you see with the people who do end up going to jail is a problem in society. I expect to see that states with lower median incomes have higher rates of arrests. I also expect to see rent and incomes having a high correlation.    
+
+
+**Tidying***
+
+
+```{r cars}
+library(dplyr)
+library(tidyr)
+usinrent <- us_rent_income %>% mutate(third_col = moe) %>% mutate_at(c("third_col"), list(lead), n=1) %>% rename(moe_inc = moe, moe_rent = third_col) %>% pivot_wider(names_from = "variable", values_from="estimate") 
+
+usinrent1 <- usinrent %>% mutate(rent=lead(rent)) %>% dplyr::filter(row_number() %% 2 == 1)
+glimpse(usinrent1)
+```
+
+I needed to tidy the us_rent_income data set before merging both data sets. First, I wanted to make every other row into a separate column from the "column" by using mutate and renaming it to have two columns for the moe rent and moe income. After that, I used pivot_wider to make every variable a column by moving the rent and income variable from the "variable" column into their own columns with their variables. I then shifted the cells in column rent up by one and deleted the even rows that had NA as a value.  
+
+```{R}
+USArrests1 <- tibble::rownames_to_column(USArrests, "NAME")
+glimpse(USArrests1) 
+```
+
+I then had to tidy USArrests data set so that the observations(rows) would become a single column in order for both datasets to have a common variable to join. 
+
+***Joining***
+```{R}
+bothdata <- usinrent1 %>% inner_join(USArrests1, by="NAME")
+glimpse(bothdata)
+```
+There were 52 observations in the usinrent1  and 50 observartions in USArrests. I used inner join so that all the rows with NA's would be dropped. The data set usinrent1 included District of Columbia and Puerto Rico and USArrests1 didn't, so inner join fixed this so that the joined data set has 50 states with no NA cells. 
+
+***Wrangling***
+```{R}
+bothdata1 <- bothdata %>% mutate(percent = (Assault/100000))
+bothdata1 <- subset(bothdata1, select=-c(GEOID))
+
+bothdata11 <- bothdata1 %>% group_by(NAME) %>% arrange(desc(Murder))
+bothdata12<- bothdata1 %>% group_by(NAME) %>% arrange(desc(income))
+
+bothdata2 <- bothdata1 %>% select(NAME, UrbanPop) %>% filter(UrbanPop <= 50)
+glimpse(bothdata2)
+
+
+```
+I used 'mutate' to create a new column of the percentage of urban population for each state. The 'select' function was used to choose certain columns, and 'arrange' arranged the data in descending order.  I thought it was interesting that Mississippi has the lowest median yearly income and the second highest murder rates. However Nevada has the highest rape cases and North Carolina has the highest assault cases.  I used select and filter so that I can view what states have an urban population percentage equal or lower than 50%. 
+
+```{R}
+bothdata1 %>% summarise_all(n_distinct)
+summary(bothdata1)
+
+```
+
+Based on the summarized data, it was not surprising that assault arrests has the highest minimum value compared to murder and rape arrests. It also has the highest maximum value. It was surprising that in one of the states the median rent is as low as 681. 
+
+***Visualizing***
+
+```{R}
+cormat <- bothdata1 %>% select_if(is.numeric) %>% cor(use="pair")
+glimpse(cormat)
+```
+Above I found the correlations of all numeric values. 
+
+```{R}
+library(tidyverse)
+tidycor <- cormat %>% as.data.frame %>% rownames_to_column("var1") %>% pivot_longer(-1, names_to="var2", values_to="correlation")
+glimpse(tidycor)
+```
+
+I made a correlation matrix of the numeric variables titled cormat, and then tidyed the correlations that's titled tidycor. 
+```{R}
+tidycor %>% ggplot(aes(var1,var2,fill=correlation))+
+geom_tile()+
+scale_fill_gradient2(low="red",mid="white",high="blue") +
+geom_text(aes(label=round(correlation,2)),color = "black", size = 4)+ 
+theme(axis.text.x = element_text(angle = 90, hjust=1))+ 
+coord_fixed() 
+
+```
+In the correlation heatmap, the biggest correlations are for murder and assault arrests and percent of urban population and murder arrests. I expected to see that states with high murder arrests also have high assault arrests. The correlation heatmap also shows that rent and income are correlated as well, which makes sense that states with higher incomes would be able to pay higher rent. There seems to be no correlation between rent and Murder arrests, Rape or income, or Murder arrests and UrbanPop. This was a surprising result to me. 
+
+
+```{R}
+ggplot(data = bothdata, aes(x = rent, y = income)) +
+geom_point(size=4, aes(color = NAME), stat="summary")+ggtitle("Average Income vs Rent for 50 States") + scale_y_continuous(breaks=seq(20000,38000,1000))
+
+
+```
+As expected, there seems to be some trend that the higher the income, the more rent will be. Based on the graph, it seems like Hawaii has the highest median rent, but the income is not as high. Maryland has a high median income, but the rent is not as high as in Hawaii. I expected to see that California had a very high rent, but it had an even lower income than Maryland despite them having similar median rent values. 
+```{R}
+ggplot(bothdata, aes(x=Murder, y=income)) + geom_boxplot() +
+geom_jitter(alpha=.5, aes(color=NAME))+ ggtitle("Relationship Between Murder Arrests and Average Income") + theme(legend.position = "none")
+
+
+```
+
+As you can see on the boxplot, there's many states that are outliers and don't fall in line with the boxplot. I wanted to use these variables because I originally thought that there would a relationship between these variables, but there was small negative correlation. 
+
+
+***Dimensionality Reduction***
+```{R}
+library(cluster)
+clust_dat<-bothdata%>%dplyr::select("income", "Murder", "UrbanPop")
+pam1 <- clust_dat%>% scale() %>% pam(k=2)
+pam1
+```
+I used PAM to create two clusters for my numeric values because I thought that was the best estimate. Below, I performed the function that would pick the best cluster number. The Mediods are the inital cluster centers
+
+```{R}
+pam1$silinfo$avg.width
+pam_dat <- bothdata %>% select("income", "Murder", "UrbanPop")
+sil_width<-vector()
+for(i in 2:10){  
+  pam_fit <- pam(pam_dat, k = i)  
+  sil_width[i] <- pam_fit$silinfo$avg.width  
+}
+ggplot()+geom_line(aes(x=1:10,y=sil_width))+scale_x_continuous(name="k",breaks=1:10)
+```
+
+Based on the silhouette width, the number of clusters should be 2. The higher the silhouette width, the more cohesive and separated the clusters are. 
+```{R}
+library(plotly)
+pamclust<-clust_dat %>% mutate(cluster=as.factor(pam1$clustering))
+pamclust%>%plot_ly(x= ~income,  y = ~Murder, z = ~UrbanPop, color= ~cluster,
+        type = "scatter3d", mode = "markers") %>% layout(autosize = F, width=900, height=400)
+
+```
+I made a 3D representation of the three variables in 2 clusters. Even though I used the best cluster number, this plot shows there's not a strong relationship between these three variables. The clusters are not that separated and are very close to each other. 

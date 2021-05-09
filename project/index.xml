@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on Victoria Martinez: Projects</title>
+    <link>/project/</link>
+    <description>Recent content in Projects on Victoria Martinez: Projects</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Project 1</title>
+      <link>/project/project1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project1/</guid>
+      <description>Victoria Martinez, EID: vm22948 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+Introduction
+The data sets I have chosen are USArrests and us_rent_income. USArrests includes murder, assault, and rape arrests per 100,000 residents in each state, as well as the percent urban population.</description>
+    </item>
+    
+    <item>
+      <title>Project 2</title>
+      <link>/project/project2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project2/</guid>
+      <description>Victoria Martinez, vm22948 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+Introduction This data set is exploring the relationship of risk factors with low infant birth weight. It has 189 rows, 10 columns, 1890 observations, and the data was collected at Baystate Medical Center, Springfield, Mass during 1986. There is a ‘low’ column that is an indicator of birth weight less than 2.</description>
+    </item>
+    
+  </channel>
+</rss>
